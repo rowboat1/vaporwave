@@ -22,13 +22,16 @@ MOON_2_X = 0.32 * SCREENWIDTH
 MOON_2_Y = 0.34 * SCREENHEIGHT
 MOON_2_SIZE = 0.025 * SCREENWIDTH
 
+SHADOW_MATRIX_1 = [[1, -0.75], [0, -0.5]]
+SHADOW_MATRIX_2 = [[1, -1.7], [0, -0.4]]
+
 SATURN_START = (0.14 * SCREENWIDTH, 0)
 SATURN_END = (0.44 * SCREENWIDTH, 0)
 SATURN_VERTEX = (0.9 * SCREENWIDTH, 0.6 * SCREENHEIGHT)
 
 buildings = []
 
-class Building:
+class Building: 
     def __init__(self, x):
         h = SCREENWIDTH / 2
         k = SCREENHEIGHT / HEIGHT_FACTOR_FOR_BUILDINGS
@@ -82,22 +85,28 @@ class AngularBuilding(Building):
         pygame.draw.polygon(main_s, "red", self.right_polygon, 1)
 
 class Man:
-    def __init__(self, x, y, width, height):
-        self.rect = pygame.Rect(x, y, width, height)
-        unit_size = self.rect.width / 3
-        self.torso = pygame.Rect(
-                self.rect.left + unit_size / 2, 
-                self.rect.top + (unit_size * 2 / 3), 
-                unit_size * 1.5,
-                unit_size * 2.5,
+    def __init__(self, x, y, unit_size, shadow_matrix):
+        arm_length = 1.875 * unit_size
+        leg_length = 1.75 * unit_size
+        leg_width = 0.225 * unit_size
+        inner_leg_width = 0.75 * unit_size
+        origin = vec(x, y)
+        self.rect = pygame.Rect(
+            x - unit_size / 2 + leg_width, 
+            y - unit_size * 3.1666 - leg_length, 
+            unit_size * 3,
+            unit_size * 6
         )
-        arm_length = 0.75 * self.torso.height
-        leg_length = 0.7 * self.torso.height
-        leg_width = 0.15 * self.torso.width
-        inner_leg_width = 0.5 * self.torso.width
+        self.torso = pygame.Rect(
+            x + leg_width, 
+            y - (leg_length + unit_size * 2.5), 
+            unit_size * 1.5,
+            unit_size * 2.5,
+        )
+        # This is the left side of the left leg.
         self.polygon = [
             # Left leg
-                (self.torso.left - leg_width, self.torso.bottom + leg_length),
+                origin,
                 (self.torso.centerx - inner_leg_width, self.torso.bottom + leg_length),
                 (self.torso.centerx, self.torso.bottom),
             # Right leg
@@ -137,9 +146,16 @@ class Man:
                 (self.torso.left, self.torso.top + arm_length / 3),
                 self.torso.bottomleft,
         ]
+        transformable_map = map(lambda point: vec(point) - origin, self.polygon)
+        mapped = map(lambda p: vec(
+            p[0] * shadow_matrix[0][0] + p[1] * shadow_matrix[0][1], 
+            p[0] * shadow_matrix[1][0] + shadow_matrix[1][1] * p[1]
+        ), transformable_map)
+        self.shadow = list(map(lambda p: origin + p, mapped))
 
     def draw(self):
         pygame.draw.polygon(main_s, "yellow", self.polygon)
+        pygame.draw.polygon(main_s, "yellow", self.shadow, width=1)
         # pygame.draw.rect(main_s, "yellow", self.torso)
 
 def generate_buildings():
@@ -158,8 +174,8 @@ def generate_buildings():
 
 buildings = generate_buildings()
 persons = [
-    Man(0.3 *SCREENWIDTH, 0.57 * SCREENHEIGHT, 0.14 * SCREENWIDTH, 0.2 * SCREENHEIGHT),
-    Man(0.47 * SCREENWIDTH, 0.63 * SCREENHEIGHT, 0.1 * SCREENWIDTH, 0.2 * SCREENHEIGHT)
+    Man(0.3128 *SCREENWIDTH, 0.8759 * SCREENHEIGHT, 0.04667 * SCREENWIDTH, SHADOW_MATRIX_1),
+    Man(0.47917 * SCREENWIDTH, 0.8485 * SCREENHEIGHT, 0.03333 * SCREENWIDTH, SHADOW_MATRIX_2)
 ]
 
 t = 0
