@@ -95,46 +95,52 @@ class Man:
         leg_length = 0.7 * self.torso.height
         leg_width = 0.15 * self.torso.width
         inner_leg_width = 0.5 * self.torso.width
-        self.polygons = [
-            [
+        self.polygon = [
+            # Left leg
+                (self.torso.left - leg_width, self.torso.bottom + leg_length),
+                (self.torso.centerx - inner_leg_width, self.torso.bottom + leg_length),
+                (self.torso.centerx, self.torso.bottom),
+            # Right leg
+                (self.torso.centerx, self.torso.bottom),
+                (self.torso.centerx + inner_leg_width, self.torso.bottom + leg_length),
+                (self.torso.right + leg_width, self.torso.bottom + leg_length),
+            # Right arm
+                self.torso.bottomright,
+                # Armpit
+                (self.torso.right, self.torso.top + arm_length / 3),
+                # Elbow inner
+                (self.torso.right + unit_size * 2/6, self.torso.top + arm_length / 2),
+                # hand inner
+                (self.torso.right, self.torso.top + arm_length - arm_length / 3),
+                # hand outer
+                (self.torso.right, self.torso.top + arm_length),
+                # Elbow outer
+                (self.torso.right + unit_size * 3/4, self.torso.top + arm_length / 2),
+                # Shoulder
+                self.torso.topright,
+                self.torso.midtop,
+            # Head
                 (self.torso.centerx - (unit_size / 3), self.rect.top),
                 (self.torso.centerx + (unit_size / 3), self.rect.top),
                 self.torso.midtop,
-            ],
-            [
+            # Left arm
                 self.torso.topleft,
+                # Elbow outer
                 (self.torso.left - unit_size * 3/4, self.torso.top + arm_length / 2),
+                # Hand outer
                 (self.torso.left, self.torso.top + arm_length),
+                # Hand inner
                 (self.torso.left, self.torso.top + arm_length - arm_length / 3),
+                # Elbow inner
                 (self.torso.left - unit_size * 2/6, self.torso.top + arm_length / 2),
-                (self.torso.left, self.torso.top + arm_length / 3)
-            ],
-            [
+                # Armpit
+                (self.torso.left, self.torso.top + arm_length / 3),
                 self.torso.bottomleft,
-                (self.torso.left - leg_width, self.torso.bottom + leg_length),
-                (self.torso.centerx - inner_leg_width, self.torso.bottom + leg_length),
-                (self.torso.centerx, self.torso.bottom)
-            ],
-            [
-                self.torso.topright,
-                (self.torso.right + unit_size * 3/4, self.torso.top + arm_length / 2),
-                (self.torso.right, self.torso.top + arm_length),
-                (self.torso.right, self.torso.top + arm_length - arm_length / 3),
-                (self.torso.right + unit_size * 2/6, self.torso.top + arm_length / 2),
-                (self.torso.right, self.torso.top + arm_length / 3)
-            ],
-            [
-                self.torso.bottomright,
-                (self.torso.right + leg_width, self.torso.bottom + leg_length),
-                (self.torso.centerx + inner_leg_width, self.torso.bottom + leg_length),
-                (self.torso.centerx, self.torso.bottom)
-            ],
         ]
 
     def draw(self):
-        for polygon in self.polygons:
-            pygame.draw.polygon(main_s, "yellow", polygon)
-        pygame.draw.rect(main_s, "yellow", self.torso)
+        pygame.draw.polygon(main_s, "yellow", self.polygon)
+        # pygame.draw.rect(main_s, "yellow", self.torso)
 
 def generate_buildings():
     generated_buildings = []
