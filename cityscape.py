@@ -84,7 +84,7 @@ class AngularBuilding(Building):
         pygame.draw.polygon(main_s, "red", self.left_polygon, 1)
         pygame.draw.polygon(main_s, "red", self.right_polygon, 1)
 
-class Man:
+class Person:
     def __init__(self, x, y, unit_size, shadow_matrix):
         arm_length = 1.875 * unit_size
         leg_length = 1.75 * unit_size
@@ -174,8 +174,8 @@ def generate_buildings():
 
 buildings = generate_buildings()
 persons = [
-    Man(0.3128 *SCREENWIDTH, 0.8759 * SCREENHEIGHT, 0.04667 * SCREENWIDTH, SHADOW_MATRIX_1),
-    Man(0.47917 * SCREENWIDTH, 0.8485 * SCREENHEIGHT, 0.03333 * SCREENWIDTH, SHADOW_MATRIX_2)
+    Person(0.3128 *SCREENWIDTH, 0.8759 * SCREENHEIGHT, 0.04667 * SCREENWIDTH, SHADOW_MATRIX_1),
+    Person(0.47917 * SCREENWIDTH, 0.8485 * SCREENHEIGHT, 0.03333 * SCREENWIDTH, SHADOW_MATRIX_2)
 ]
 
 t = 0
