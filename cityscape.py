@@ -206,7 +206,7 @@ while 1:
 
     for person in persons:
         person.draw()
-    pygame.draw.circle(main_s, "grey", (MOON_1_X, MOON_1_Y), MOON_1_SIZE)
+    pygame.draw.circle(main_s, (255, 255, 180), (MOON_1_X, MOON_1_Y), MOON_1_SIZE)
     pygame.draw.circle(main_s, "white", (MOON_2_X, MOON_2_Y), MOON_2_SIZE)
 
 
